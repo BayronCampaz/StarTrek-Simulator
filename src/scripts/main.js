@@ -7,14 +7,28 @@ const rabbitmqSettings = {
   path: 'ws'
 }
 
+let client = null;
+let idPlayer = "p" + parseInt((Math.random()* 1000000));
+
 async function connect(options) {
   try {
-    const client = await RsupMQTT.connect(options)
-    client.subscribe('teamName/topic').on(message => console.log(message.string))
-    client.publish('teamName/topic', 'Hello MQTT')
+    client = await RsupMQTT.connect(options)
+    client.subscribe('raichu/participants').on(message => getNewPlayer(message.string))
+    client.publish('raichu/participants', idPlayer)
   } catch (error) {
     console.log(error)
   }
+}
+
+function getNewPlayer(player){
+  console.log(player)
+  client.subscribe(`raichu${player}`).on(message => getShipPlayer(message.string));
+
+}
+
+function getShipPlayer(objectShip){
+  let ship = JSON.parse(objectShip);
+  console.log(ship);
 }
 
 class StarShip {
@@ -92,11 +106,15 @@ function addKeyEvent(batship) {
     if (right.indexOf(e.key) >= 0) batship.setState(batship.state.go, 1)
 
     if (stop.indexOf(e.key) >= 0) batship.setState(0, 0)
+
+    client.publish(`raichu${idPlayer}`, batship);
   })
 
   document.body.addEventListener('keyup', (e) => {
     if (go.indexOf(e.key) >= 0) batship.setState(0, batship.state.direction)
     if (direction.indexOf(e.key) >= 0) batship.setState(batship.state.go, 0)
+
+    client.publish(`raichu${idPlayer}`, batship);
   })
 }
 
