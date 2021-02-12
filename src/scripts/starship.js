@@ -82,6 +82,7 @@ class Starship {
       newLaser.classList.add('laser')
       newLaser.style.left = `${xPosition + 20}px`
       newLaser.style.top = `${yPosition + 20}px`
+
       return newLaser
     }
 
@@ -90,7 +91,7 @@ class Starship {
 
       const { go, direction } = this.state
       const angle = (this.angle + direction) % 360
-      let laser = this.createLaserElement(angle, direction)
+      let laser = this.createLaserElement(angle)
       var height = mainPlayArea.offsetHeight - 20
       var width = mainPlayArea.offsetWidth - 20
       mainPlayArea.appendChild(laser)
