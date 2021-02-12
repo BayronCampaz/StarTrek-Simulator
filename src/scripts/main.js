@@ -24,7 +24,7 @@ async function connect(options) {
     client.subscribe('raichu/'+room.id+'/bullets').on(getOtherBullets)
 
     client.publish('raichu/'+room.id+'/informNewPosition', myPlayer)
-    paintUser(myPlayer,true)
+ 
     addKeyEvent(myPlayer)
   } catch (error) {
     console.log(error)
@@ -125,6 +125,7 @@ async function createRoom(){
     
 
     connect(rabbitmqSettings)
+    paintUser(myPlayer,true)
     changeToGame();
     myPlayer.starship.play()
 
@@ -169,6 +170,7 @@ async function joinForm() {
 
     setTimeout( () => {
       if(isCreate){
+        paintUser(myPlayer,true)
         changeToGame();
         myPlayer.starship.play()
       }else{
