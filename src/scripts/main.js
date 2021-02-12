@@ -11,6 +11,7 @@ let client = null
 let room = null
 let myPlayer = null
 let otherShips = []
+let isCreate = false;
 
 async function connect(options) {
   try {
@@ -35,6 +36,7 @@ function getOldShips(dataIn){
   if(myPlayer.id===data.newShip){
     paintOtherShip(data.myPlayer)
     paintUser(data.myPlayer)
+    isCreate=true;
   }
   
 }
@@ -105,6 +107,7 @@ function getOtherBullets(dataIn){
 
 
 async function createRoom(){
+
   let team = document.getElementById("input_team").value;
   let nickname = document.getElementById("input_nickname");
   let gender = document.getElementById("input_gender").value;
@@ -133,6 +136,9 @@ async function createRoom(){
 
 async function joinForm() {
 
+  let errorMessage = document.getElementById("wrong-code");
+  errorMessage.style.display = "none";
+
   let idRoom = document.getElementById("input_gamecode");
   let team = document.getElementById("input_team_join").value;
   let nickname = document.getElementById("input_nickname_join");
@@ -160,8 +166,17 @@ async function joinForm() {
     myPlayer.starship.id = myPlayer.id;
 
     connect(rabbitmqSettings)
-    changeToGame();
-    myPlayer.starship.play()
+
+    setTimeout( () => {
+      if(isCreate){
+        changeToGame();
+        myPlayer.starship.play()
+      }else{
+        errorMessage.style.display = "block";
+      }
+    }, 1000 )
+
+  
   }
     
 }
@@ -194,6 +209,9 @@ function showForm(form){
     formCreate.style.display = "block";
   ;
   }else if(form === 2){
+    
+    let errorMessage = document.getElementById("wrong-code");
+    errorMessage.style.display = "none";
 
     divButton.style.display = "none";
     formJoin.style.display = "block";

@@ -196,3 +196,10 @@ select {
   height: 20px;
   position: relative;
 }
+
+.wrong-code {
+  border-color: red;
+  background-color: salmon;
+  color: black;
+  border-radius: 5px;
+}
