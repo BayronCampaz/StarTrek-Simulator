@@ -258,7 +258,7 @@ function paintOtherShip(player){
 }
 
 function modifyLifes(ship){
-  console.log(ship)
+  //console.log(ship)
   document.getElementById(ship.id).innerHTML = "Lifes:" + ship.life
 }
 

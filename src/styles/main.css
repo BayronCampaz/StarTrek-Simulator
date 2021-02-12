@@ -194,5 +194,5 @@ select {
 .laser {
   width: 20px;
   height: 20px;
-  position: relative;
+  position: absolute;
 }
