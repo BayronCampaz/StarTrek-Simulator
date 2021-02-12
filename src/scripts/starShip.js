@@ -12,7 +12,7 @@ class StarShip {
     }
 
     getShoot(){
-      console.log("ME DISPARARON")
+      //console.log("ME DISPARARON")
       this.life = this.life - 1
     }
   
@@ -29,7 +29,7 @@ class StarShip {
 
       const galaxyDiv = document.getElementById("galaxy").offsetWidth
 
-      console.log(galaxyDiv)
+      //console.log(galaxyDiv)
       if(galaxyDiv===0)return false
       if((posx)<0 || (posx+radious)>galaxyDiv ||
          (posy)<0 || (posy+radious)>400){
@@ -41,7 +41,7 @@ class StarShip {
   
     setPosition(x, y) {
       
-      console.log(x,y)
+      //console.log(x,y)
       if(!this.detectLimit(x,y,50)){
         this.x = x
         this.y = y
@@ -85,6 +85,7 @@ class StarShip {
       newLaser.classList.add('laser')
       newLaser.style.left = `${xPosition + 20}px`
       newLaser.style.top = `${yPosition + 20}px`
+
       return newLaser
     }
 
@@ -93,7 +94,7 @@ class StarShip {
 
       const { go, direction } = this.state
       const angle = (this.angle + direction) % 360
-      let laser = this.createLaserElement(angle, direction)
+      let laser = this.createLaserElement(angle)
       var height = mainPlayArea.offsetHeight - 20
       var width = mainPlayArea.offsetWidth - 20
       mainPlayArea.appendChild(laser)
