@@ -12,6 +12,7 @@ let room = null
 let player = null
 let starShip = null
 let otherShips = []
+let isCreate = false;
 
 async function connect(options) {
   try {
@@ -22,9 +23,8 @@ async function connect(options) {
     client.subscribe('raichu/'+room.id+'/informPositionOld').on(getOldShips )
     client.subscribe('raichu/'+room.id+'/positions').on(changePosition)
     client.subscribe('raichu/'+room.id+'/bullets').on(getOtherBullets)
-
     client.publish('raichu/'+room.id+'/informNewPosition', player)
-    paintUser(player,true)
+    
   } catch (error) {
     console.log(error)
   }
@@ -35,6 +35,7 @@ function getOldShips(dataIn){
   if(player.id===data.newShip){
     paintOtherShip(data.player)
     paintUser(data.player)
+    isCreate=true;
   }
   
 }
@@ -145,6 +146,7 @@ function addKeyEvent(batship) {
 
 
 async function createRoom(){
+
   let team = document.getElementById("input_team").value;
   let nickname = document.getElementById("input_nickname");
   let gender = document.getElementById("input_gender").value;
@@ -162,6 +164,7 @@ async function createRoom(){
     
 
     connect(rabbitmqSettings)
+    paintUser(player,true)
     changeToGame();
     player.starship.play()
     addKeyEvent(player.starship)
@@ -173,6 +176,9 @@ async function createRoom(){
 }
 
 async function joinForm() {
+
+  let errorMessage = document.getElementById("wrong-code");
+  errorMessage.style.display = "none";
 
   let idRoom = document.getElementById("input_gamecode");
   let team = document.getElementById("input_team_join").value;
@@ -201,9 +207,19 @@ async function joinForm() {
     player.starship.id = player.id;
 
     connect(rabbitmqSettings)
-    changeToGame();
-    player.starship.play()
-    addKeyEvent(player.starship)    
+
+    setTimeout( () => {
+      if(isCreate){
+        changeToGame();
+        player.starship.play()
+        addKeyEvent(player.starship) 
+        paintUser(player,true) 
+      }else{
+        errorMessage.style.display = "block";
+      }
+    }, 1000 )
+
+  
   }
     
 }
@@ -236,6 +252,9 @@ function showForm(form){
     formCreate.style.display = "block";
   ;
   }else if(form === 2){
+    
+    let errorMessage = document.getElementById("wrong-code");
+    errorMessage.style.display = "none";
 
     divButton.style.display = "none";
     formJoin.style.display = "block";
