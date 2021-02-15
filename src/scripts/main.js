@@ -1,52 +1,54 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 const rabbitmqSettings = {
-  username: 'admin',
-  password: 'admin',
-  host: 'frontend.ascuy.me',
+  username: "admin",
+  password: "admin",
+  host: "frontend.ascuy.me",
   port: 15675,
   keepalive: 20,
-  path: 'ws'
-}
+  path: "ws",
+};
 
-let client = null
-let room = null
-let myPlayer = null
-let otherShips = []
+let client = null;
+let room = null;
+let myPlayer = null;
+let otherShips = [];
 let isCreate = false;
 
 async function connect(options) {
   try {
-    client = await RsupMQTT.connect(options)
-    myPlayer.id = client.clientId
+    client = await RsupMQTT.connect(options);
+    myPlayer.id = client.clientId;
     myPlayer.starship.id = myPlayer.id;
-    client.subscribe('raichu/'+room.id+'/informNewPosition').on(addNewShip )
-    client.subscribe('raichu/'+room.id+'/informPositionOld').on(getOldShips )
-    client.subscribe('raichu/'+room.id+'/positions').on(changePosition)
-    client.subscribe('raichu/'+room.id+'/bullets').on(getOtherBullets)
+    client.subscribe("raichu/"+room.id+"/informNewPosition").on(addNewShip );
+    client.subscribe("raichu/"+room.id+"/informPositionOld").on(getOldShips );
+    client.subscribe("raichu/"+room.id+"/positions").on(changePosition);
+    client.subscribe("raichu/"+room.id+"/bullets").on(getOtherBullets);
 
-    client.publish('raichu/'+room.id+'/informNewPosition', myPlayer)
+    client.publish("raichu/"+room.id+"/informNewPosition", myPlayer);
  
-    addKeyEvent(myPlayer)
+    addKeyEvent(myPlayer);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
 function getOldShips(dataIn){
-  var data = JSON.parse(dataIn.string)
+  var data = JSON.parse(dataIn.string);
   if(myPlayer.id===data.newShip){
-    paintOtherShip(data.myPlayer)
-    paintUser(data.myPlayer)
+    paintOtherShip(data.myPlayer);
+    paintUser(data.myPlayer);
     isCreate=true;
   }
   
 }
 
 function addNewShip(dataIn){
-  var data = JSON.parse(dataIn.string)
+  var data = JSON.parse(dataIn.string);
   if(myPlayer.id !== data.id){
-    paintOtherShip(data)
-    paintUser(data)
-    client.publish('raichu/'+room.id+'/informPositionOld',{newShip:data.id, myPlayer})
+    paintOtherShip(data);
+    paintUser(data);
+    client.publish("raichu/"+room.id+"/informPositionOld",{newShip:data.id, myPlayer});
   }
   
 }
@@ -54,21 +56,21 @@ function addNewShip(dataIn){
 
 function paintUser(data,myUser=false){
 
-  const klingon = document.getElementById(data.team)
+  const klingon = document.getElementById(data.team);
 
-  const divUser = document.createElement('div')
-  divUser.className = 'user'
-  divUser.id = 'user'+data.id
+  const divUser = document.createElement("div");
+  divUser.className = "user";
+  divUser.id = "user"+data.id;
   if(myUser){
-    divUser.style.border = "3px solid white"
-    divUser.style.borderRadius = "10px"
+    divUser.style.border = "3px solid white";
+    divUser.style.borderRadius = "10px";
   }
   
-  const img = document.createElement('img')
-  img.src = './assets/user/'+data.gender+'.svg'
-  img.className = 'userIcon'
+  const img = document.createElement("img");
+  img.src = "./assets/user/"+data.gender+".svg";
+  img.className = "userIcon";
   
-  const divData = document.createElement('div')
+  const divData = document.createElement("div");
   
   const nickname = document.createElement("h4");
   nickname.textContent = "Nickname:"+data.nickname;
@@ -78,17 +80,17 @@ function paintUser(data,myUser=false){
   lives.id = data.id;
 
 
-  divData.appendChild(nickname)
-  divData.appendChild(lives)
-  divUser.appendChild(img)
-  divUser.appendChild(divData)
-  klingon.appendChild(divUser)
+  divData.appendChild(nickname);
+  divData.appendChild(lives);
+  divUser.appendChild(img);
+  divUser.appendChild(divData);
+  klingon.appendChild(divUser);
 
 }
 
 function changePosition(dataIn){
   
-  var data = JSON.parse(dataIn.string)
+  var data = JSON.parse(dataIn.string);
   
   if( otherShips[data.starshipId] !== undefined && otherShips[data.starshipId] !== null){
     otherShips[data.starshipId].starship.setPosition(data.x, data.y);
@@ -98,7 +100,7 @@ function changePosition(dataIn){
 
 function getOtherBullets(dataIn){
   
-  var data = JSON.parse(dataIn.string)
+  var data = JSON.parse(dataIn.string);
 
   if( otherShips[data.starshipId] !== undefined && otherShips[data.starshipId] !== null){
     otherShips[data.starshipId].starship.fireLaser(moveLaser);
@@ -118,16 +120,16 @@ async function createRoom(){
     nickname.style.borderColor = "red";
   }
   else{
-    myPlayer = new Player(null,nickname.value, gender, null, team)
+    myPlayer = new Player(null,nickname.value, gender, null, team);
     room = new Room();
-    let starship = Starship.create(galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 5, 5, 90)
-    myPlayer.setStartship(starship)
+    let starship = Starship.create(galaxy, "./assets/spaceship/"+ship+".png", "small batship", 5, 5, 90);
+    myPlayer.setStartship(starship);
     
 
-    connect(rabbitmqSettings)
-    paintUser(myPlayer,true)
+    connect(rabbitmqSettings);
+    paintUser(myPlayer,true);
     changeToGame();
-    myPlayer.starship.play()
+    myPlayer.starship.play();
 
     nickname.style.borderColor = "white";
   }
@@ -159,24 +161,24 @@ async function joinForm() {
 
 
   if(idRoom.value.length!==0 && nickname.value.length!==0){
-    myPlayer = new Player(null, nickname.value, gender, null, team)
+    myPlayer = new Player(null, nickname.value, gender, null, team);
     room = new Room();
     room.id = idRoom.value;
-    let starship = Starship.create( galaxy, './assets/spaceship/'+ship+'.png', 'small batship', 5, 5, 90)
-    myPlayer.setStartship(starship)
+    let starship = Starship.create( galaxy, "./assets/spaceship/"+ship+".png", "small batship", 5, 5, 90);
+    myPlayer.setStartship(starship);
     myPlayer.starship.id = myPlayer.id;
 
-    connect(rabbitmqSettings)
+    connect(rabbitmqSettings);
 
     setTimeout( () => {
       if(isCreate){
-        paintUser(myPlayer,true)
+        paintUser(myPlayer,true);
         changeToGame();
-        myPlayer.starship.play()
+        myPlayer.starship.play();
       }else{
         errorMessage.style.display = "block";
       }
-    }, 1000 )
+    }, 1000 );
 
   
   }
@@ -189,7 +191,7 @@ function changeToGame(){
 
   var idRoom =  document.getElementById("id_room");
   idRoom.textContent = " Id Room:  " + room.id;
-  idRoom.style.display = "block"
+  idRoom.style.display = "block";
 
   var game = document.getElementById("galaxy");
   game.style.display = "block";
@@ -209,7 +211,7 @@ function showForm(form){
 
     divButton.style.display = "none";
     formCreate.style.display = "block";
-  ;
+  
   }else if(form === 2){
     
     let errorMessage = document.getElementById("wrong-code");
@@ -228,9 +230,9 @@ function showForm(form){
 
 function paintOtherShip(player){
 
-  let galaxy = document.getElementById('galaxy')
-  let ship = Starship.create( galaxy, player.starship.imagePath, 'small batship' , player.starship.x, player.starship.y, player.starship.angle)
-  let playerObject = new Player(player.id,player.nickname, player.gender, ship, player.team)
+  let galaxy = document.getElementById("galaxy");
+  let ship = Starship.create( galaxy, player.starship.imagePath, "small batship" , player.starship.x, player.starship.y, player.starship.angle);
+  let playerObject = new Player(player.id,player.nickname, player.gender, ship, player.team);
   otherShips[player.id] = playerObject;
   otherShips[player.id].starship.play();     
 
@@ -238,14 +240,14 @@ function paintOtherShip(player){
 
 function modifyLifes(player,me=false){
   
-  document.getElementById(player.id).innerHTML = "Lifes:" + player.starship.life
+  document.getElementById(player.id).innerHTML = "Lifes:" + player.starship.life;
 
   if(player.starship.life===0){
-    player.starship.el.remove()
-    const userDiv = document.getElementById('user'+player.id)
-    userDiv.style.border = "3px solid red"
-    userDiv.style.borderRadius = "10px"
-    player.alive=false
+    player.starship.el.remove();
+    const userDiv = document.getElementById("user"+player.id);
+    userDiv.style.border = "3px solid red";
+    userDiv.style.borderRadius = "10px";
+    player.alive=false;
   }
 }
 
@@ -254,53 +256,53 @@ function playerShooted(x,y,laser,laserInterval){
   Object.keys(otherShips).forEach(ship => {
     
     if(detectCollision(x,y,otherShips[ship].starship.x,otherShips[ship].starship.y)) {
-      otherShips[ship].starship.getShoot()
-      clearInterval(laserInterval)
-      laser.remove()
-      modifyLifes(otherShips[ship])
+      otherShips[ship].starship.getShoot();
+      clearInterval(laserInterval);
+      laser.remove();
+      modifyLifes(otherShips[ship]);
 
     }
   });
 
   if(detectCollision(x,y, myPlayer.starship.x,myPlayer.starship.y)){
-    myPlayer.starship.getShoot()
-    clearInterval(laserInterval)
+    myPlayer.starship.getShoot();
+    clearInterval(laserInterval);
     laser.remove();
-    modifyLifes(myPlayer,true)
+    modifyLifes(myPlayer,true);
 
   } 
 }
 
 function detectCollision(x1,y1,x2,y2){
 
-  let distance = Math.hypot(Math.abs(x1-x2),Math.abs(y1-y2))
+  let distance = Math.hypot(Math.abs(x1-x2),Math.abs(y1-y2));
 
-  if(distance<25) return true
-  else return false
+  if(distance<25) return true;
+  else return false;
 }
 
 
 function moveLaser(laser, angle, width, height) {
   let timeLifeLaser = 0;
   let laserInterval = setInterval(() => {
-    let xPosition = parseInt(laser.style.left)
-    let yPosition = parseInt(laser.style.top)
+    let xPosition = parseInt(laser.style.left);
+    let yPosition = parseInt(laser.style.top);
 
     if ( ( xPosition >= width || xPosition <= 0 ) || ( yPosition >= height || yPosition <= 0 ) || (angle === 0 || angle === 180) ) {
-      laser.remove()
-      clearInterval(laserInterval)
+      laser.remove();
+      clearInterval(laserInterval);
     }else {
-      const x = Math.sin(angle / 360.0 * 2 * Math.PI) * 10
-      const y = Math.cos(angle / 360.0 * 2 * Math.PI) * 10
-      laser.style.left = `${xPosition + x}px`
-      laser.style.top = `${yPosition - y}px`
+      const x = Math.sin(angle / 360.0 * 2 * Math.PI) * 10;
+      const y = Math.cos(angle / 360.0 * 2 * Math.PI) * 10;
+      laser.style.left = `${xPosition + x}px`;
+      laser.style.top = `${yPosition - y}px`;
 
       if(timeLifeLaser > 150){
-        playerShooted(xPosition + x,yPosition - y, laser, laserInterval)
+        playerShooted(xPosition + x,yPosition - y, laser, laserInterval);
       }
 
       timeLifeLaser += 50;
     }
-  }, 50)
+  }, 50);
 }
 
