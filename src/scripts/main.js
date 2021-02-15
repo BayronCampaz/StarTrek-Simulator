@@ -246,6 +246,11 @@ function modifyLifes(player,me=false){
     userDiv.style.border = "3px solid red"
     userDiv.style.borderRadius = "10px"
     player.alive=false
+
+    if(detectLosers(player.team)){
+      const showMessage = document.getElementById("message")
+      showMessage.style.display = "block"
+    }    
   }
 }
 
@@ -285,6 +290,22 @@ function playerShooted(id,x,y,laser,laserInterval){
 
   } 
 }
+
+function detectLosers(team){
+
+  var loser = true
+
+  Object.keys(otherShips).forEach(ship => {
+    
+    if( otherShips[ship].team === team && otherShips[ship].alive === true ) {
+      loser = false
+      return loser
+    }
+  });
+
+  return loser
+}
+
 
 function detectCollision(x1,y1,x2,y2){
 
