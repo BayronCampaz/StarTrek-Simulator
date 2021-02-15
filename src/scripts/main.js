@@ -15,7 +15,8 @@ let myPlayer = null;
 let otherShips = [];
 let isCreate = false;
 
-async function connect(options) {
+
+async function connect(options,create=false) {
   try {
     client = await RsupMQTT.connect(options);
     myPlayer.id = client.clientId;
@@ -27,7 +28,28 @@ async function connect(options) {
 
     client.publish("raichu/"+room.id+"/informNewPosition", myPlayer);
  
-    addKeyEvent(myPlayer);
+    if(create){
+      console.log("ENTROOOOO");
+      setTimeout( () => {
+        if(isCreate){
+          paintUser(myPlayer,true);
+          changeToGame();
+          myPlayer.starship.play();
+          addKeyEvent(myPlayer);
+        }else{
+          let errorMessage = document.getElementById("wrong-code");
+          errorMessage.style.display = "none";
+          errorMessage.style.display = "block";
+        }
+      }, 1000 );
+    }
+    else{
+      paintUser(myPlayer,true);
+      changeToGame();
+      myPlayer.starship.play();
+      addKeyEvent(myPlayer);
+    }
+    
   } catch (error) {
     console.log(error);
   }
@@ -55,6 +77,7 @@ function addNewShip(dataIn){
 
 
 function paintUser(data,myUser=false){
+  console.log(data);
 
   const klingon = document.getElementById(data.team);
 
@@ -75,13 +98,13 @@ function paintUser(data,myUser=false){
   const nickname = document.createElement("h4");
   nickname.textContent = "Nickname:"+data.nickname;
 
-  const lives = document.createElement("h4");
-  lives.textContent = "Lives:"+data.starship.life;
-  lives.id = data.id;
+  const lifes = document.createElement("h4");
+  lifes.textContent = "lifes:"+data.starship.life;
+  lifes.id = data.id;
 
 
   divData.appendChild(nickname);
-  divData.appendChild(lives);
+  divData.appendChild(lifes);
   divUser.appendChild(img);
   divUser.appendChild(divData);
   klingon.appendChild(divUser);
@@ -124,13 +147,8 @@ async function createRoom(){
     room = new Room();
     let starship = Starship.create(galaxy, "./assets/spaceship/"+ship+".png", "small batship", 5, 5, 90);
     myPlayer.setStartship(starship);
-    
 
     connect(rabbitmqSettings);
-    paintUser(myPlayer,true);
-    changeToGame();
-    myPlayer.starship.play();
-
     nickname.style.borderColor = "white";
   }
   
@@ -138,9 +156,6 @@ async function createRoom(){
 }
 
 async function joinForm() {
-
-  let errorMessage = document.getElementById("wrong-code");
-  errorMessage.style.display = "none";
 
   let idRoom = document.getElementById("input_gamecode");
   let team = document.getElementById("input_team_join").value;
@@ -168,19 +183,8 @@ async function joinForm() {
     myPlayer.setStartship(starship);
     myPlayer.starship.id = myPlayer.id;
 
-    connect(rabbitmqSettings);
-
-    setTimeout( () => {
-      if(isCreate){
-        paintUser(myPlayer,true);
-        changeToGame();
-        myPlayer.starship.play();
-      }else{
-        errorMessage.style.display = "block";
-      }
-    }, 1000 );
-
-  
+    connect(rabbitmqSettings,true);
+ 
   }
     
 }
@@ -239,6 +243,7 @@ function paintOtherShip(player){
 }
 
 function modifyLifes(player,me=false){
+  console.log(player);
   
   document.getElementById(player.id).innerHTML = "Lifes:" + player.starship.life;
 
@@ -254,7 +259,8 @@ function modifyLifes(player,me=false){
 function playerShooted(x,y,laser,laserInterval){
   
   Object.keys(otherShips).forEach(ship => {
-    
+    if(!otherShips[ship].alive)return;
+
     if(detectCollision(x,y,otherShips[ship].starship.x,otherShips[ship].starship.y)) {
       otherShips[ship].starship.getShoot();
       clearInterval(laserInterval);
@@ -263,6 +269,8 @@ function playerShooted(x,y,laser,laserInterval){
 
     }
   });
+
+  if(!myPlayer.alive)return ;
 
   if(detectCollision(x,y, myPlayer.starship.x,myPlayer.starship.y)){
     myPlayer.starship.getShoot();

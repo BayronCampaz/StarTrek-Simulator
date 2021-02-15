@@ -77,7 +77,7 @@ class Starship {
     createLaserElement(angle) {
       let xPosition = parseInt(window.getComputedStyle(this.el).getPropertyValue("left"));
       let yPosition = parseInt(window.getComputedStyle(this.el).getPropertyValue("top"));
-      // eslint-disable-next-line no-unused-vars
+
       let newLaser = document.createElement("img");
       newLaser.src = "assets/spaceship/laser.png";
       newLaser.classList.add("laser");
