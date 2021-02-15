@@ -86,7 +86,7 @@ class Starship {
       return newLaser
     }
 
-    fireLaser(moveLaser) {
+    fireLaser(id, moveLaser) {
       const mainPlayArea = document.getElementById('galaxy')
 
       const { go, direction } = this.state
@@ -96,7 +96,7 @@ class Starship {
       var width = mainPlayArea.offsetWidth - 20
       mainPlayArea.appendChild(laser)
 
-      moveLaser(laser, angle, width, height)
+      moveLaser(id, laser, angle, width, height)
     }
   
 //*********************** */
