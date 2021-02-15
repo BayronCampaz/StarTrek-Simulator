@@ -18,7 +18,7 @@ function addKeyEvent(player) {
 
         if (stop.indexOf(e.key) >= 0) player.starship.setState(0, 0)
         if (shoot.indexOf(e.key) >= 0){
-        player.starship.fireLaser(moveLaser);
+        player.starship.fireLaser(player.id, moveLaser);
         let data = { starshipId : player.id}
         client.publish('raichu/'+room.id+'/bullets', data );
         } 

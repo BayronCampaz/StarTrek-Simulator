@@ -126,7 +126,7 @@ function getOtherBullets(dataIn){
   var data = JSON.parse(dataIn.string);
 
   if( otherShips[data.starshipId] !== undefined && otherShips[data.starshipId] !== null){
-    otherShips[data.starshipId].starship.fireLaser(moveLaser);
+    otherShips[data.starshipId].starship.fireLaser(data.starshipId,moveLaser);
   }
 }
 
@@ -248,15 +248,20 @@ function modifyLifes(player,me=false){
   document.getElementById(player.id).innerHTML = "Lifes:" + player.starship.life;
 
   if(player.starship.life===0){
-    player.starship.el.remove();
-    const userDiv = document.getElementById("user"+player.id);
-    userDiv.style.border = "3px solid red";
-    userDiv.style.borderRadius = "10px";
-    player.alive=false;
+    player.starship.el.remove()
+    const userDiv = document.getElementById('user'+player.id)
+    userDiv.style.border = "3px solid red"
+    userDiv.style.borderRadius = "10px"
+    player.alive=false
+
+    if(detectLosers(player.team)){
+      const showMessage = document.getElementById("message")
+      showMessage.style.display = "block"
+    }    
   }
 }
 
-function playerShooted(x,y,laser,laserInterval){
+function playerShooted(id,x,y,laser,laserInterval){
   
   Object.keys(otherShips).forEach(ship => {
     if(!otherShips[ship].alive)return;
@@ -281,6 +286,22 @@ function playerShooted(x,y,laser,laserInterval){
   } 
 }
 
+function detectLosers(team){
+
+  var loser = true
+
+  Object.keys(otherShips).forEach(ship => {
+    
+    if( otherShips[ship].team === team && otherShips[ship].alive === true ) {
+      loser = false
+      return loser
+    }
+  });
+
+  return loser
+}
+
+
 function detectCollision(x1,y1,x2,y2){
 
   let distance = Math.hypot(Math.abs(x1-x2),Math.abs(y1-y2));
@@ -290,7 +311,7 @@ function detectCollision(x1,y1,x2,y2){
 }
 
 
-function moveLaser(laser, angle, width, height) {
+function moveLaser(id, laser, angle, width, height) {
   let timeLifeLaser = 0;
   let laserInterval = setInterval(() => {
     let xPosition = parseInt(laser.style.left);
@@ -306,7 +327,7 @@ function moveLaser(laser, angle, width, height) {
       laser.style.top = `${yPosition - y}px`;
 
       if(timeLifeLaser > 150){
-        playerShooted(xPosition + x,yPosition - y, laser, laserInterval);
+        playerShooted(id, xPosition + x,yPosition - y, laser, laserInterval)
       }
 
       timeLifeLaser += 50;
