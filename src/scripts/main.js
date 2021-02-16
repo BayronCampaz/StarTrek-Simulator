@@ -15,6 +15,24 @@ let myPlayer = null;
 const otherShips = [];
 let isCreate = false;
 
+function transformObject(player){
+
+  return {
+    id : player.id,
+    nickname : player.nickname,
+    gender : player.gender,
+    team : player.team,
+    starship : {
+      x:player.starship.x,
+      y:player.starship.y,
+      angle:player.starship.angle,
+      imagePath:player.starship.imagePath
+    },
+    alive : player.alive,
+  }
+}
+
+
 function paintUser(data, myUser = false) {
   const klingon = document.getElementById(data.team);
 
@@ -68,7 +86,7 @@ function addNewShip(dataIn) {
   if (myPlayer.id !== data.id) {
     paintOtherShip(data);
     paintUser(data);
-    client.publish(`raichu/${room.id}/informPositionOld`, { newShip: data.id, myPlayer });
+    client.publish(`raichu/${room.id}/informPositionOld`, { newShip: data.id, myPlayer:transformObject(myPlayer) });
   }
 }
 
@@ -149,8 +167,8 @@ function moveLaser(laser, angle, width, height) {
       laser.remove();
       clearInterval(laserInterval);
     } else {
-      const x = Math.sin((angle / 360.0) * 2 * Math.PI) * 10;
-      const y = Math.cos((angle / 360.0) * 2 * Math.PI) * 10;
+      const x = Math.sin((angle / 360.0) * 2 * Math.PI) * 15;
+      const y = Math.cos((angle / 360.0) * 2 * Math.PI) * 15;
       // eslint-disable-next-line no-param-reassign
       laser.style.left = `${xPosition + x}px`;
       // eslint-disable-next-line no-param-reassign
@@ -183,7 +201,7 @@ async function connect(options, create = false) {
     client.subscribe(`raichu/${room.id}/positions`).on(changePosition);
     client.subscribe(`raichu/${room.id}/bullets`).on(getOtherBullets);
 
-    client.publish(`raichu/${room.id}/informNewPosition`, myPlayer);
+    client.publish(`raichu/${room.id}/informNewPosition`, transformObject(myPlayer));
 
     if (create) {
       setTimeout(() => {

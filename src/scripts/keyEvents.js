@@ -12,8 +12,8 @@ function addKeyEvent(player) {
 
   document.body.addEventListener('keydown', (e) => {
     if (player.alive) {
-      if (up.indexOf(e.key) >= 0) player.starship.setState(1, player.starship.state.direction);
-      if (down.indexOf(e.key) >= 0) player.starship.setState(-1, player.starship.state.direction);
+      if (up.indexOf(e.key) >= 0) player.starship.setState(5, player.starship.state.direction);
+      if (down.indexOf(e.key) >= 0) player.starship.setState(-5, player.starship.state.direction);
       if (left.indexOf(e.key) >= 0) player.starship.setState(player.starship.state.go, -1);
       if (right.indexOf(e.key) >= 0) player.starship.setState(player.starship.state.go, 1);
 
