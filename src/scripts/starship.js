@@ -8,12 +8,16 @@ class Starship {
       this.setAngle(angle);
       this.setPosition(x, y);
       this.setVisibility(true);
-
+      this.points=0;
       this.life=5;
     }
 
     getShoot(){
       this.life = this.life - 1;
+    }
+
+    addPoints(){
+      this.points += 20;
     }
   
     setState(go = 0, direction = 0) {

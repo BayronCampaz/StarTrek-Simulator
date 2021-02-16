@@ -29,17 +29,18 @@ async function connect(options,create=false) {
     client.publish("raichu/"+room.id+"/informNewPosition", myPlayer);
  
     if(create){
-      console.log("ENTROOOOO");
       setTimeout( () => {
         if(isCreate){
           paintUser(myPlayer,true);
           changeToGame();
           myPlayer.starship.play();
           addKeyEvent(myPlayer);
+          document.getElementById("join_button").disabled = false;
         }else{
           let errorMessage = document.getElementById("wrong-code");
           errorMessage.style.display = "none";
           errorMessage.style.display = "block";
+          document.getElementById("join_button").disabled = false;
         }
       }, 1000 );
     }
@@ -102,9 +103,14 @@ function paintUser(data,myUser=false){
   lifes.textContent = "lifes:"+data.starship.life;
   lifes.id = data.id;
 
+  const points = document.createElement("h4");
+  points.textContent = "points:"+data.starship.points;
+  points.id = data.id+"points";
+
 
   divData.appendChild(nickname);
   divData.appendChild(lifes);
+  divData.appendChild(points);
   divUser.appendChild(img);
   divUser.appendChild(divData);
   klingon.appendChild(divUser);
@@ -156,6 +162,8 @@ async function createRoom(){
 }
 
 async function joinForm() {
+
+  document.getElementById("join_button").disabled = true;
 
   let idRoom = document.getElementById("input_gamecode");
   let team = document.getElementById("input_team_join").value;
@@ -243,7 +251,6 @@ function paintOtherShip(player){
 }
 
 function modifyLifes(player,me=false){
-  console.log(player);
   
   document.getElementById(player.id).innerHTML = "Lifes:" + player.starship.life;
 
@@ -261,16 +268,36 @@ function modifyLifes(player,me=false){
   }
 }
 
+function modifyPoints(player){
+  document.getElementById(player.id+"points").innerHTML = "Points:" + player.starship.points;
+}
+
+
 function playerShooted(id,x,y,laser,laserInterval){
   
   Object.keys(otherShips).forEach(ship => {
     if(!otherShips[ship].alive)return;
 
     if(detectCollision(x,y,otherShips[ship].starship.x,otherShips[ship].starship.y)) {
-      otherShips[ship].starship.getShoot();
-      clearInterval(laserInterval);
-      laser.remove();
-      modifyLifes(otherShips[ship]);
+      if(otherShips[id] !== undefined){
+        if(otherShips[ship].team !== otherShips[id].team){
+          otherShips[ship].starship.getShoot();
+          otherShips[id].starship.addPoints();
+          clearInterval(laserInterval);
+          laser.remove();
+          modifyLifes(otherShips[ship]);
+          modifyPoints(otherShips[id]);
+        }
+      }else{
+        if(otherShips[ship].team !== myPlayer.team){
+          otherShips[ship].starship.getShoot();
+          myPlayer.starship.addPoints();
+          clearInterval(laserInterval)
+          laser.remove()
+          modifyLifes(otherShips[ship]);
+          modifyPoints(myPlayer);
+        }
+      }
 
     }
   });
@@ -278,10 +305,16 @@ function playerShooted(id,x,y,laser,laserInterval){
   if(!myPlayer.alive)return ;
 
   if(detectCollision(x,y, myPlayer.starship.x,myPlayer.starship.y)){
-    myPlayer.starship.getShoot();
-    clearInterval(laserInterval);
-    laser.remove();
-    modifyLifes(myPlayer,true);
+    
+    if(myPlayer.team !== otherShips[id].team){
+      myPlayer.starship.getShoot()
+      otherShips[id].starship.addPoints();
+      clearInterval(laserInterval)
+      laser.remove();
+      modifyLifes(myPlayer,true)
+      modifyPoints(otherShips[id]);
+    }
+
 
   } 
 }
