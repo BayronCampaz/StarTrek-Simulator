@@ -15,6 +15,24 @@ let myPlayer = null;
 let otherShips = [];
 let isCreate = false;
 
+function transformObject(player){
+
+  return {
+    id : player.id,
+    nickname : player.nickname,
+    gender : player.gender,
+    team : player.team,
+    starship : {
+      x:player.starship.x,
+      y:player.starship.y,
+      angle:player.starship.angle,
+      imagePath:player.starship.imagePath,
+      points:player.starship.points,
+      life:player.starship.life,
+    },
+    alive : player.alive,
+  }
+}
 
 async function connect(options,create=false) {
   try {
@@ -26,8 +44,8 @@ async function connect(options,create=false) {
     client.subscribe("raichu/"+room.id+"/positions").on(changePosition);
     client.subscribe("raichu/"+room.id+"/bullets").on(getOtherBullets);
 
-    client.publish("raichu/"+room.id+"/informNewPosition", myPlayer);
- 
+    client.publish("raichu/"+room.id+"/informNewPosition", transformObject(myPlayer));
+
     if(create){
       setTimeout( () => {
         if(isCreate){
@@ -71,14 +89,13 @@ function addNewShip(dataIn){
   if(myPlayer.id !== data.id){
     paintOtherShip(data);
     paintUser(data);
-    client.publish("raichu/"+room.id+"/informPositionOld",{newShip:data.id, myPlayer});
+    client.publish("raichu/"+room.id+"/informPositionOld",{newShip:data.id, myPlayer:transformObject(myPlayer)});
   }
   
 }
 
 
 function paintUser(data,myUser=false){
-  console.log(data);
 
   const klingon = document.getElementById(data.team);
 
@@ -354,8 +371,8 @@ function moveLaser(id, laser, angle, width, height) {
       laser.remove();
       clearInterval(laserInterval);
     }else {
-      const x = Math.sin(angle / 360.0 * 2 * Math.PI) * 10;
-      const y = Math.cos(angle / 360.0 * 2 * Math.PI) * 10;
+      const x = Math.sin(angle / 360.0 * 2 * Math.PI) * 15;
+      const y = Math.cos(angle / 360.0 * 2 * Math.PI) * 15;
       laser.style.left = `${xPosition + x}px`;
       laser.style.top = `${yPosition - y}px`;
 
@@ -367,4 +384,3 @@ function moveLaser(id, laser, angle, width, height) {
     }
   }, 50);
 }
-
