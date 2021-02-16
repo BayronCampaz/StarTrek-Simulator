@@ -23,28 +23,38 @@
 </head>
 
 <body>
-  <h1 class="title">StarTrek-Simulator</h1>
   <noscript>Your browser does not support JavaScript!</noscript>
   <!-- Menu -->
   <div id='menu'>
     <!-- Init Screen -->    
-    <div id="initScreen"class="button-init col-12 col-s-12">
-      <button onclick="showForm(2)">Join Game</button>
-      <br>
-      <br>
-      <br>
-      <hr>
-      <br>
-      <br>
-      <button onclick="showForm(1)">Create Game</button>
+    <div id="initScreen"class="button-init row">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <img id='img-logo'src="assets/environment/logo.png">
+        <img id='img-title'src="assets/environment/title.png">
+        <button onclick="showForm(2)">Join Game</button>
+        <br>
+        <br>
+        <br>
+        <hr>
+        <br>
+        <br>
+        <button onclick="showForm(1)">Create Game</button>
+      </div>
+      <div class="col-3"></div>
+
     </div>
     <!-- End Init Screen -->
     <!-- Create form -->
     <div id="form-create">
       <div class="row">
-        <div class="col-4 col-s-4"></div>
         <div class="col-4 col-s-4">
-          <button onclick="showForm(3)">Back</button>
+          <div class="right" >
+            <input onclick="showForm(3)" type="image" id="myimage" src="assets/environment/back-arrow.png" />
+          </div>
+        </div>
+        <div class="col-4 col-s-4 center">
+          <h2>CREATE NEW GAME</h2>
         </div>
         <div class="col-4 col-s-4"></div>
       </div>
@@ -93,11 +103,17 @@
     <!-- Join form -->
     <div id="form-join">
       <div class="row">
-        <div class="col-4 col-s-4"></div>
-        <div class="col-4 col-s-4">
-          <button onclick="showForm(3)">Back</button>
+        <div class="col-4 col-s-2">
+          <div class="right" >
+            <input onclick="showForm(3)" type="image" id="myimage" src="assets/environment/back-arrow.png" />
+          </div>
         </div>
-        <div class="col-4 col-s-4"></div>
+        <div class="col-4 col-s-8">
+          <div class="center">
+            <h2>JOIN THE GAME</h2>
+          </div>
+        </div>
+        <div class="col-4 col-s-2"></div>
       </div>
 
 
