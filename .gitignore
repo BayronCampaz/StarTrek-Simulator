@@ -1,2 +1,5 @@
 .DS_Store
 tools/data/
+
+node_modules
+.vscode
