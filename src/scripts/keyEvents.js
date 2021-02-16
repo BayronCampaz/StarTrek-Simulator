@@ -17,28 +17,12 @@ function addKeyEvent(player) {
       if (left.indexOf(e.key) >= 0) player.starship.setState(player.starship.state.go, -1);
       if (right.indexOf(e.key) >= 0) player.starship.setState(player.starship.state.go, 1);
 
-<<<<<<< HEAD
       if (stop.indexOf(e.key) >= 0) player.starship.setState(0, 0);
       if (shoot.indexOf(e.key) >= 0) {
         player.starship.fireLaser(moveLaser);
         const data = { starshipId: player.id };
         client.publish(`raichu/${room.id}/bullets`, data);
       }
-||||||| 68ee2cf
-        if (stop.indexOf(e.key) >= 0) player.starship.setState(0, 0)
-        if (shoot.indexOf(e.key) >= 0){
-        player.starship.fireLaser(moveLaser);
-        let data = { starshipId : player.id}
-        client.publish('raichu/'+room.id+'/bullets', data );
-        } 
-=======
-        if (stop.indexOf(e.key) >= 0) player.starship.setState(0, 0)
-        if (shoot.indexOf(e.key) >= 0){
-        player.starship.fireLaser(player.id, moveLaser);
-        let data = { starshipId : player.id}
-        client.publish('raichu/'+room.id+'/bullets', data );
-        } 
->>>>>>> 9c827fd8801104e6e38ba7a9a42820951f2104d5
 
       const data = {
         x: player.starship.x,
