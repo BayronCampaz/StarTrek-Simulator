@@ -46,6 +46,7 @@ class Starship {
     }
   }
 
+<<<<<<< HEAD
   setVisibility(visible) {
     this.el.style.visibility = visible ? 'visible' : 'hidden';
   }
@@ -54,11 +55,19 @@ class Starship {
     this.timer = setInterval(() => {
       const { go, direction } = this.state;
       if (go === 0 && direction === 0) return;
+||||||| 68ee2cf
+    fireLaser(moveLaser) {
+      const mainPlayArea = document.getElementById("galaxy");
+=======
+    fireLaser(id, moveLaser) {
+      const mainPlayArea = document.getElementById('galaxy')
+>>>>>>> 9c827fd8801104e6e38ba7a9a42820951f2104d5
 
       const angle = (this.angle + direction) % 360;
       const x = this.x + Math.sin((this.angle / 360.0) * 2 * Math.PI) * go;
       const y = this.y - Math.cos((this.angle / 360.0) * 2 * Math.PI) * go;
 
+<<<<<<< HEAD
       this.setPosition(x, y);
       this.setAngle(angle);
     }, 30);
@@ -99,6 +108,23 @@ class Starship {
 
   static create(parent, imagePath, extraClass, x = 0, y = 0, angle = 0) {
     const img = document.createElement('img');
+||||||| 68ee2cf
+      moveLaser(laser, angle, width, height);
+    }
+  
+//*********************** */
+  
+    static create( parent, imagePath, extraClass, x = 0, y = 0, angle = 0) {
+    const img = document.createElement("img");
+=======
+      moveLaser(id, laser, angle, width, height)
+    }
+  
+//*********************** */
+  
+    static create( parent, imagePath, extraClass, x = 0, y = 0, angle = 0) {
+    const img = document.createElement("img");
+>>>>>>> 9c827fd8801104e6e38ba7a9a42820951f2104d5
     img.className = `starship ${extraClass}`;
     img.src = imagePath;
     parent.appendChild(img);

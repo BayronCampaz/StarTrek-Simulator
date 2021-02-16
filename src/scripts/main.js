@@ -46,12 +46,50 @@ function paintUser(data, myUser = false) {
   klingon.appendChild(divUser);
 }
 
+<<<<<<< HEAD
 function paintOtherShip(player) {
   const galaxy = document.getElementById('galaxy');
   const ship = Starship.create(galaxy, player.starship.imagePath, 'small batship', player.starship.x, player.starship.y, player.starship.angle);
   const playerObject = new Player(player.id, player.nickname, player.gender, ship, player.team);
   otherShips[player.id] = playerObject;
   otherShips[player.id].starship.play();
+||||||| 68ee2cf
+function changePosition(dataIn){
+  
+  var data = JSON.parse(dataIn.string);
+  
+  if( otherShips[data.starshipId] !== undefined && otherShips[data.starshipId] !== null){
+    otherShips[data.starshipId].starship.setPosition(data.x, data.y);
+    otherShips[data.starshipId].starship.setAngle(data.angle);
+  }
+}
+
+function getOtherBullets(dataIn){
+  
+  var data = JSON.parse(dataIn.string);
+
+  if( otherShips[data.starshipId] !== undefined && otherShips[data.starshipId] !== null){
+    otherShips[data.starshipId].starship.fireLaser(moveLaser);
+  }
+=======
+function changePosition(dataIn){
+  
+  var data = JSON.parse(dataIn.string);
+  
+  if( otherShips[data.starshipId] !== undefined && otherShips[data.starshipId] !== null){
+    otherShips[data.starshipId].starship.setPosition(data.x, data.y);
+    otherShips[data.starshipId].starship.setAngle(data.angle);
+  }
+}
+
+function getOtherBullets(dataIn){
+  
+  var data = JSON.parse(dataIn.string);
+
+  if( otherShips[data.starshipId] !== undefined && otherShips[data.starshipId] !== null){
+    otherShips[data.starshipId].starship.fireLaser(data.starshipId,moveLaser);
+  }
+>>>>>>> 9c827fd8801104e6e38ba7a9a42820951f2104d5
 }
 
 function getOldShips(dataIn) {
@@ -111,13 +149,48 @@ function modifyLifes(player, me = false) {
 function detectCollision(x1, y1, x2, y2) {
   const distance = Math.hypot(Math.abs(x1 - x2), Math.abs(y1 - y2));
 
+<<<<<<< HEAD
   if (distance < 25) return true;
   return false;
+||||||| 68ee2cf
+  if(player.starship.life===0){
+    player.starship.el.remove();
+    const userDiv = document.getElementById("user"+player.id);
+    userDiv.style.border = "3px solid red";
+    userDiv.style.borderRadius = "10px";
+    player.alive=false;
+  }
+=======
+  if(player.starship.life===0){
+    player.starship.el.remove()
+    const userDiv = document.getElementById('user'+player.id)
+    userDiv.style.border = "3px solid red"
+    userDiv.style.borderRadius = "10px"
+    player.alive=false
+
+    if(detectLosers(player.team)){
+      const showMessage = document.getElementById("message")
+      showMessage.style.display = "block"
+    }    
+  }
+>>>>>>> 9c827fd8801104e6e38ba7a9a42820951f2104d5
 }
 
+<<<<<<< HEAD
 function playerShooted(x, y, laser, laserInterval) {
   Object.keys(otherShips).forEach((ship) => {
     if (!otherShips[ship].alive) return;
+||||||| 68ee2cf
+function playerShooted(x,y,laser,laserInterval){
+  
+  Object.keys(otherShips).forEach(ship => {
+    if(!otherShips[ship].alive)return;
+=======
+function playerShooted(id,x,y,laser,laserInterval){
+  
+  Object.keys(otherShips).forEach(ship => {
+    if(!otherShips[ship].alive)return;
+>>>>>>> 9c827fd8801104e6e38ba7a9a42820951f2104d5
 
     if (detectCollision(x, y, otherShips[ship].starship.x, otherShips[ship].starship.y)) {
       otherShips[ship].starship.getShoot();
@@ -133,11 +206,61 @@ function playerShooted(x, y, laser, laserInterval) {
     myPlayer.starship.getShoot();
     clearInterval(laserInterval);
     laser.remove();
+<<<<<<< HEAD
     modifyLifes(myPlayer, true);
   }
+||||||| 68ee2cf
+    modifyLifes(myPlayer,true);
+
+  } 
 }
 
+function detectCollision(x1,y1,x2,y2){
+
+  let distance = Math.hypot(Math.abs(x1-x2),Math.abs(y1-y2));
+
+  if(distance<25) return true;
+  else return false;
+=======
+    modifyLifes(myPlayer,true);
+
+  } 
+}
+
+function detectLosers(team){
+
+  var loser = true
+
+  Object.keys(otherShips).forEach(ship => {
+    
+    if( otherShips[ship].team === team && otherShips[ship].alive === true ) {
+      loser = false
+      return loser
+    }
+  });
+
+  return loser
+}
+
+
+function detectCollision(x1,y1,x2,y2){
+
+  let distance = Math.hypot(Math.abs(x1-x2),Math.abs(y1-y2));
+
+  if(distance<25) return true;
+  else return false;
+>>>>>>> 9c827fd8801104e6e38ba7a9a42820951f2104d5
+}
+
+<<<<<<< HEAD
 function moveLaser(laser, angle, width, height) {
+||||||| 68ee2cf
+
+function moveLaser(laser, angle, width, height) {
+=======
+
+function moveLaser(id, laser, angle, width, height) {
+>>>>>>> 9c827fd8801104e6e38ba7a9a42820951f2104d5
   let timeLifeLaser = 0;
   const laserInterval = setInterval(() => {
     const xPosition = parseInt(laser.style.left, 10);
@@ -156,8 +279,16 @@ function moveLaser(laser, angle, width, height) {
       // eslint-disable-next-line no-param-reassign
       laser.style.top = `${yPosition - y}px`;
 
+<<<<<<< HEAD
       if (timeLifeLaser > 150) {
         playerShooted(xPosition + x, yPosition - y, laser, laserInterval);
+||||||| 68ee2cf
+      if(timeLifeLaser > 150){
+        playerShooted(xPosition + x,yPosition - y, laser, laserInterval);
+=======
+      if(timeLifeLaser > 150){
+        playerShooted(id, xPosition + x,yPosition - y, laser, laserInterval)
+>>>>>>> 9c827fd8801104e6e38ba7a9a42820951f2104d5
       }
 
       timeLifeLaser += 50;
