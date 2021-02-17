@@ -3,3 +3,9 @@ tools/data/
 
 node_modules
 .vscode
+
+.firebase
+
+firebase.json
+
+.firebaserc
