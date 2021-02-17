@@ -58,11 +58,12 @@ class Starship {
     this.el.style.visibility = visible ? "visible" : "hidden";
   }
 
+
   play() {
     this.timer = setInterval(()=> {
       const { go, direction } = this.state;  
       if (go === 0 && direction === 0) return;
-      
+
       const angle = (this.angle + direction) % 360;
       const x = this.x + Math.sin(this.angle / 360.0 * 2 * Math.PI) * go;
       const y = this.y - Math.cos(this.angle / 360.0 * 2 * Math.PI) * go;
