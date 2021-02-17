@@ -1,13 +1,14 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 const rabbitmqSettings = {
-  username: "admin",
-  password: "admin",
-  host: "frontend.ascuy.me",
-  port: 15675,
+  username: 'admin',
+  password: 'admin',
+  host: 'frontend.ascuy.me',
+  port: 443,
+  ssl: true,
   keepalive: 20,
-  path: "ws",
-};
+  path: 'ws'
+ }
 
 let client = null;
 let room = null;
