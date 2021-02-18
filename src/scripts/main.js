@@ -9,6 +9,8 @@ const rabbitmqSettings = {
   path: "ws",
 };
 
+myStorage = window.sessionStorage;
+
 let client = null;
 let room = null;
 let myPlayer = null;
@@ -34,6 +36,23 @@ function transformObject(player){
   }
 }
 
+window.addEventListener('beforeunload', function (e) {
+  
+  if(client && myPlayer.id){
+    client.publish("raichu/"+room.id+"/playerDiconnected", myPlayer.id);
+    client.disconnect()
+  } 
+
+});
+
+function erasePlayer(idPlayer){
+  document.getElementById("user"+idPlayer.string).remove()
+  otherShips[idPlayer.string].starship.el.remove()
+
+  delete otherShips[idPlayer.string]
+  console.log(otherShips)
+}
+
 async function connect(options,create=false) {
   try {
     client = await RsupMQTT.connect(options);
@@ -43,9 +62,10 @@ async function connect(options,create=false) {
     client.subscribe("raichu/"+room.id+"/informPositionOld").on(getOldShips );
     client.subscribe("raichu/"+room.id+"/positions").on(changePosition);
     client.subscribe("raichu/"+room.id+"/bullets").on(getOtherBullets);
+    client.subscribe("raichu/"+room.id+"/playerDiconnected").on(erasePlayer);
 
     client.publish("raichu/"+room.id+"/informNewPosition", transformObject(myPlayer));
-
+  
     if(create){
       setTimeout( () => {
         if(isCreate){
@@ -59,6 +79,10 @@ async function connect(options,create=false) {
           errorMessage.style.display = "none";
           errorMessage.style.display = "block";
           document.getElementById("join_button").disabled = false;
+          
+          myStorage.setItem('myPlayer',JSON.stringify(transformObject(myPlayer)));
+          myStorage.setItem('room',room.id);
+
         }
       }, 1000 );
     }
@@ -67,7 +91,10 @@ async function connect(options,create=false) {
       changeToGame();
       myPlayer.starship.play();
       addKeyEvent(myPlayer);
-    }
+      
+      myStorage.setItem('myPlayer',JSON.stringify(transformObject(myPlayer)));
+      myStorage.setItem('room',room.id);
+    }     
     
   } catch (error) {
     console.log(error);
@@ -170,7 +197,7 @@ async function createRoom(){
     room = new Room();
     let starship = Starship.create(galaxy, "./assets/spaceship/"+ship+".png", "small batship", 5, 5, 90);
     myPlayer.setStartship(starship);
-
+    
     connect(rabbitmqSettings);
     nickname.style.borderColor = "white";
   }
