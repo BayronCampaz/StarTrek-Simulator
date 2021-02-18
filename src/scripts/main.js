@@ -4,7 +4,8 @@ const rabbitmqSettings = {
   username: "admin",
   password: "admin",
   host: "frontend.ascuy.me",
-  port: 15675,
+  port: 443,
+  ssl: true,
   keepalive: 20,
   path: "ws",
 };
@@ -127,6 +128,8 @@ function paintUser(data,myUser=false){
   const klingon = document.getElementById(data.team);
 
   const divUser = document.createElement("div");
+  const divNewUser = document.createElement("div");
+  divNewUser.className = "new-player col-12 col-s-12";
   divUser.className = "user";
   divUser.id = "user"+data.id;
   if(myUser){
@@ -135,29 +138,49 @@ function paintUser(data,myUser=false){
   }
   
   const img = document.createElement("img");
+
   img.src = "./assets/user/"+data.gender+".svg";
   img.className = "userIcon";
+
+  const imgNew = document.createElement("img");
+  imgNew.src = "./assets/user/"+data.gender+".svg";
+  imgNew.className = "userIcon";
   
   const divData = document.createElement("div");
   
   const nickname = document.createElement("h4");
   nickname.textContent = "Nickname:"+data.nickname;
 
+  const nicknameNew = document.createElement("p");
+  nicknameNew.textContent = data.nickname;
+
   const lifes = document.createElement("h4");
   lifes.textContent = "lifes:"+data.starship.life;
   lifes.id = data.id;
+
+  const lifesNew = document.createElement("p");
+  lifesNew.textContent = data.starship.life;
+
 
   const points = document.createElement("h4");
   points.textContent = "points:"+data.starship.points;
   points.id = data.id+"points";
 
+  const pointsNew = document.createElement("p");
+  pointsNew.textContent = data.starship.points;
+
+  divNewUser.appendChild(imgNew);
+  divNewUser.appendChild(nicknameNew);
+  divNewUser.appendChild(lifesNew);
+  divNewUser.appendChild(pointsNew);
+  klingon.appendChild(divNewUser);
 
   divData.appendChild(nickname);
   divData.appendChild(lifes);
   divData.appendChild(points);
   divUser.appendChild(img);
   divUser.appendChild(divData);
-  klingon.appendChild(divUser);
+  //klingon.appendChild(divUser);
 
 }
 

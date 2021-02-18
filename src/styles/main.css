@@ -46,6 +46,20 @@ button {
   color: #B2ADAD;
 }
 
+.list-players .new-player {
+  display: flex;
+  padding-right: 0px !important;
+}
+
+.new-player img{
+  flex: 1;
+}
+
+.new-player p{
+  flex: 2;
+  font-size: 24px;
+  margin: 10px 40px;
+}
 
 
 .form-input select {
