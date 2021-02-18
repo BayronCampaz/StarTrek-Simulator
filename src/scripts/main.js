@@ -219,14 +219,22 @@ function changeToGame(){
   form.style.display = "none";
 
   var idRoom =  document.getElementById("id_room");
+
+  var newtitleRoom =  document.getElementById("title-cd");
+  var newIdRoom =  document.getElementById("number-cd");
+
+
   idRoom.textContent = " Id Room:  " + room.id;
-  idRoom.style.display = "block";
+  newIdRoom.textContent = room.id;
+  //idRoom.style.display = "block";
+  newIdRoom.style.display = "block";
+  newtitleRoom.style.display = "block";
 
   var game = document.getElementById("galaxy");
   game.style.display = "block";
 
   var player = document.getElementById("players");
-  player.style.display = "inline-flex";
+  player.style.display = "block";
   
 }
 
