@@ -50,7 +50,6 @@ function erasePlayer(idPlayer){
   otherShips[idPlayer.string].starship.el.remove()
 
   delete otherShips[idPlayer.string]
-  console.log(otherShips)
 }
 
 async function connect(options,create=false) {
@@ -314,8 +313,10 @@ function modifyLifes(player,me=false){
     player.alive=false
 
     if(detectLosers(player.team)){
-      const showMessage = document.getElementById("message")
-      showMessage.style.display = "block"
+      //const showMessage = document.getElementById("message")
+      //showMessage.style.display = "block"
+      let modal = document.getElementById("modal");
+      modal.style.display = "block";
     }    
   }
 }
