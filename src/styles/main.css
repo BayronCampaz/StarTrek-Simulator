@@ -10,38 +10,53 @@ html {
 }
 
 button {
-  background-color: transparent;
-  border-radius: 20px;
-  border-color: white;
+  background-color: #080808;
   font-family: 'Boogaloo', cursive;
+  border-color: #080808;
   color: white;
-  font-size: 150%;
+  font-size: 24PX;
 
 }
 
-input {
+.form-button button {
+  background-color: #080808;
+  font-family: 'Boogaloo', cursive;
+  border-color: #080808;
+  color: white;
+  font-size: 28PX;
+  width: 100px;
+  height: 50px;
+
+}
+
+.form-input input {
   height: 50px;
   border-radius: 5px;
-  border-color: white;
+  border: 3px solid;
+  border-color: #00A3FF;
   font-family: 'Boogaloo', cursive;
   font-size:24px;
+  background: transparent;
+  color: #B2ADAD;
 
 }
 
 .input-gray {
   background: transparent;
-  color: gray;
+  color: #B2ADAD;
 }
 
 
 
-select {
+.form-input select {
   height: 50px;
   border-radius: 5px;
-  border-color: white;
+  border: 3px solid;
+  border-color: #00A3FF;
   font-family: 'Boogaloo', cursive;
   font-size:24px;
-
+  background: transparent;
+  color: gray;
 }
 
 
@@ -90,28 +105,57 @@ div#players {
 }
 
 .border{
-  border-radius: 10px;
-  border: 3px solid white;
+
+  border-top: 2px solid black;
 }
 
 .center{
   text-align: center;
 }
 
+
+.title-code{
+  margin: 20px;
+  display: none;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: normal;
+}
+
+.number-code{
+  background-color: white;
+  color: #080808;
+  padding: 10px;
+  margin: 20px;
+  display: none;
+  font-style: normal;
+
+}
+
 .right{
   text-align: right;
 } 
 
+.list-players h2 { 
 
-div#klingon{
-  width: 50%;
-  text-align: center;
+  font-size: 30px;
+  margin: 0px;
+  font-style: normal;
+  font-weight: normal;
+
 }
 
-div#federation{
-  width: 50%;
-  text-align: center;
+
+.list-players h3 { 
+
+  font-size: 24px;
+  margin: 0px;
+  font-style: normal;
+  font-weight: normal;
+  text-align: right;
+
 }
+
 
 .userIcon{
   width: 50px;
@@ -142,7 +186,7 @@ div#federation{
 }
 
 .form-button {
-  text-align: center;
+  text-align: left;
   min-width: 30%;
 }
 
