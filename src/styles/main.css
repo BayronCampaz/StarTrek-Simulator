@@ -328,9 +328,18 @@ select {
 }
 
 .modal-content h1 {
+  margin-top: 0px;
   margin-bottom: 0px;
-  color: #07AF04;
   font-size: 80px;
+  
+}
+
+.win-title {
+  color: #07AF04;
+}
+
+.lose-title {
+  color: #EF3C15;
 }
 
 .modal-content p {
@@ -342,12 +351,18 @@ select {
 .modal-content button {
   background-color: #066AA3;
   font-family: 'Boogaloo';
+  border-color: #066AA3 ;
   color: white;
   font-size: 24px;
 
 }
 
-
+.modal-centered{
+  height: 90%; 
+  text-align:center; 
+  display:table;
+  width:100%;
+}
 
 /* Stark Trek */
 
