@@ -14,8 +14,8 @@ function addKeyEvent(player) {
     if (player.alive) {
       if (up.indexOf(e.key) >= 0) player.starship.setState(5, player.starship.state.direction);
       if (down.indexOf(e.key) >= 0) player.starship.setState(-5, player.starship.state.direction);
-      if (left.indexOf(e.key) >= 0) player.starship.setState(player.starship.state.go, -1);
-      if (right.indexOf(e.key) >= 0) player.starship.setState(player.starship.state.go, 1);
+      if (left.indexOf(e.key) >= 0) player.starship.setState(player.starship.state.go, -5);
+      if (right.indexOf(e.key) >= 0) player.starship.setState(player.starship.state.go, 5 );
 
       if (stop.indexOf(e.key) >= 0) player.starship.setState(0, 0);
       if (shoot.indexOf(e.key) >= 0) {
