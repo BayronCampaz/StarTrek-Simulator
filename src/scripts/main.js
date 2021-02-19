@@ -136,9 +136,8 @@ function paintUser(data,myUser=false){
   const klingon = document.getElementById(data.team);
 
   const divUser = document.createElement("div");
-  const divNewUser = document.createElement("div");
-  divNewUser.className = "new-player col-12 col-s-12";
-  divUser.className = "user";
+
+  divUser.className = "user new-player col-12 col-s-12";
   divUser.id = "user"+data.id;
   if(myUser){
     divUser.style.border = "3px solid white";
@@ -150,45 +149,28 @@ function paintUser(data,myUser=false){
   img.src = "./assets/user/"+data.gender+".svg";
   img.className = "userIcon";
 
-  const imgNew = document.createElement("img");
-  imgNew.src = "./assets/user/"+data.gender+".svg";
-  imgNew.className = "userIcon";
+  //const divData = document.createElement("div");
   
-  const divData = document.createElement("div");
-  
-  const nickname = document.createElement("h4");
-  nickname.textContent = "Nickname:"+data.nickname;
+  const nickname = document.createElement("p");
+  nickname.textContent = data.nickname;
 
-  const nicknameNew = document.createElement("p");
-  nicknameNew.textContent = data.nickname;
 
-  const lifes = document.createElement("h4");
-  lifes.textContent = "lifes:"+data.starship.life;
+
+  const lifes = document.createElement("p");
+  lifes.textContent = data.starship.life;
   lifes.id = data.id;
 
-  const lifesNew = document.createElement("p");
-  lifesNew.textContent = data.starship.life;
 
 
-  const points = document.createElement("h4");
-  points.textContent = "points:"+data.starship.points;
+  const points = document.createElement("p");
+  points.textContent = data.starship.points;
   points.id = data.id+"points";
 
-  const pointsNew = document.createElement("p");
-  pointsNew.textContent = data.starship.points;
-
-  divNewUser.appendChild(imgNew);
-  divNewUser.appendChild(nicknameNew);
-  divNewUser.appendChild(lifesNew);
-  divNewUser.appendChild(pointsNew);
-  klingon.appendChild(divNewUser);
-
-  divData.appendChild(nickname);
-  divData.appendChild(lifes);
-  divData.appendChild(points);
   divUser.appendChild(img);
-  divUser.appendChild(divData);
-  //klingon.appendChild(divUser);
+  divUser.appendChild(nickname);
+  divUser.appendChild(lifes);
+  divUser.appendChild(points);
+  klingon.appendChild(divUser);
 
 }
 
@@ -367,7 +349,7 @@ function paintOtherShip(player){
 
 function modifyLifes(player,me=false){
   
-  document.getElementById(player.id).innerHTML = "Lifes:" + player.starship.life;
+  document.getElementById(player.id).innerHTML = player.starship.life;
 
   if(player.starship.life===0){
     player.starship.el.remove()
@@ -384,7 +366,7 @@ function modifyLifes(player,me=false){
 }
 
 function modifyPoints(player){
-  document.getElementById(player.id+"points").innerHTML = "Points:" + player.starship.points;
+  document.getElementById(player.id+"points").innerHTML = player.starship.points;
 }
 
 
