@@ -10,7 +10,12 @@ const rabbitmqSettings = {
   path: 'ws'
 }
 
+
+const GALAXY_WIDTH = 800;
+const GALAXY_HEIGHT = 300;
+
 let myStorage = window.sessionStorage;
+
 
 let client = null;
 let room = null;
@@ -199,7 +204,7 @@ async function createRoom(){
   else{
     myPlayer = new Player(null,nickname.value, gender, null, team);
     room = new Room();
-    let starship = Starship.create(galaxy, "./assets/spaceship/"+ship+".png", "small batship", 5, 5, 90);
+    let starship = Starship.create(galaxy, "./assets/spaceship/"+ship+".png", "small batship", randomXPosition(), randomYPosition(), 90);
     myPlayer.setStartship(starship);
     
     if(team==="klingon")starship.el.style.filter = "drop-shadow(yellow 2px 4px 6px)"
@@ -238,7 +243,7 @@ async function joinForm() {
     myPlayer = new Player(null, nickname.value, gender, null, team);
     room = new Room();
     room.id = idRoom.value;
-    let starship = Starship.create( galaxy, "./assets/spaceship/"+ship+".png", "small batship", 5, 5, 90);
+    let starship = Starship.create( galaxy, "./assets/spaceship/"+ship+".png", "small batship", randomXPosition(), randomYPosition(), 90);
     myPlayer.setStartship(starship);
     myPlayer.starship.id = myPlayer.id;
 
@@ -454,4 +459,11 @@ function moveLaser(id, laser, angle, width, height) {
       timeLifeLaser += 50;
     }
   }, 50);
+}
+
+function randomXPosition(){
+  return Math.floor(Math.random() * GALAXY_WIDTH);
+}
+function randomYPosition(){
+  return Math.floor(Math.random() * GALAXY_HEIGHT);
 }
