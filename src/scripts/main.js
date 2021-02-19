@@ -1,17 +1,21 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 const rabbitmqSettings = {
-  username: "admin",
-  password: "admin",
-  host: "frontend.ascuy.me",
-  port: 15675,
+  username: 'admin',
+  password: 'admin',
+  host: 'frontend.ascuy.me',
+  port: 443,
+  ssl: true,
   keepalive: 20,
-  path: "ws",
-};
+  path: 'ws'
+}
+
 
 const GALAXY_WIDTH = 800;
 const GALAXY_HEIGHT = 300;
-myStorage = window.sessionStorage;
+
+let myStorage = window.sessionStorage;
+
 
 let client = null;
 let room = null;
@@ -84,6 +88,9 @@ async function connect(options,create=false) {
           
           myStorage.setItem('myPlayer',JSON.stringify(transformObject(myPlayer)));
           myStorage.setItem('room',room.id);
+
+
+          console.log("LA SALA NO FUE ENCONTRADA")
 
         }
       }, 1000 );
@@ -200,6 +207,9 @@ async function createRoom(){
     let starship = Starship.create(galaxy, "./assets/spaceship/"+ship+".png", "small batship", randomXPosition(), randomYPosition(), 90);
     myPlayer.setStartship(starship);
     
+    if(team==="klingon")starship.el.style.filter = "drop-shadow(yellow 2px 4px 6px)"
+    else starship.el.style.filter = "drop-shadow(blue 2px 4px 6px)"
+
     connect(rabbitmqSettings);
     nickname.style.borderColor = "white";
   }
@@ -237,6 +247,9 @@ async function joinForm() {
     myPlayer.setStartship(starship);
     myPlayer.starship.id = myPlayer.id;
 
+    if(team==="klingon")starship.el.style.filter = "drop-shadow(yellow 2px 4px 6px)"
+    else starship.el.style.filter = "drop-shadow(blue 2px 4px 6px)"
+
     connect(rabbitmqSettings,true);
  
   }
@@ -267,8 +280,32 @@ function changeToGame(){
   
 }
 
+function joinSessionStorage(){
+  var data = JSON.parse(myStorage.getItem("myPlayer"));
+  
+  let galaxy = document.getElementById("galaxy");
+  myPlayer = new Player(null, data.nickname, data.gender, null, data.team);
+  room = new Room();
+  room.id = myStorage.getItem("room");
+
+
+  let starship = Starship.create( galaxy, data.starship.imagePath, "small batship" , data.starship.x, data.starship.x, data.starship.angle);
+  myPlayer.setStartship(starship);
+  
+
+  if(data.team==="klingon")starship.el.style.filter = "drop-shadow(yellow 2px 4px 6px)"
+  else starship.el.style.filter = "drop-shadow(blue 2px 4px 6px)"
+
+  connect(rabbitmqSettings,true);
+}
+
 
 function showForm(form){
+
+  if(myStorage.getItem("room") && form === 2 ){
+    joinSessionStorage()
+    return;
+  }
 
   var divButton = document.getElementById("initScreen");
   var formCreate = document.getElementById("form-create");
@@ -302,6 +339,8 @@ function paintOtherShip(player){
   otherShips[player.id] = playerObject;
   otherShips[player.id].starship.play();     
 
+  if(player.team==="klingon")ship.el.style.filter = "drop-shadow(yellow 2px 4px 6px)"
+  else ship.el.style.filter = "drop-shadow(blue 2px 4px 6px)"
 }
 
 function modifyLifes(player,me=false){
