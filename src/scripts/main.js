@@ -4,8 +4,7 @@ const rabbitmqSettings = {
   username: "admin",
   password: "admin",
   host: "frontend.ascuy.me",
-  port: 443,
-  ssl: true,
+  port: 15675,
   keepalive: 20,
   path: "ws",
 };
