@@ -31,10 +31,11 @@ class Starship {
   detectLimit(posx,posy,radious){
 
     const galaxyDiv = document.getElementById("galaxy").offsetWidth;
+    const galaxyDivHeight = document.getElementById("galaxy").offsetHeight;
 
     if(galaxyDiv===0)return false;
     if((posx)<0 || (posx+radious)>galaxyDiv ||
-       (posy)<0 || (posy+radious)>400){
+       (posy)<0 || (posy+radious)>galaxyDivHeight){
   
         return true;
     }

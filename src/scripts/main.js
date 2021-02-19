@@ -136,7 +136,8 @@ function paintUser(data,myUser=false){
   const klingon = document.getElementById(data.team);
 
   const divUser = document.createElement("div");
-  divUser.className = "user";
+
+  divUser.className = "user new-player col-12 col-s-12";
   divUser.id = "user"+data.id;
   if(myUser){
     divUser.style.border = "3px solid white";
@@ -144,28 +145,31 @@ function paintUser(data,myUser=false){
   }
   
   const img = document.createElement("img");
+
   img.src = "./assets/user/"+data.gender+".svg";
   img.className = "userIcon";
-  
-  const divData = document.createElement("div");
-  
-  const nickname = document.createElement("h4");
-  nickname.textContent = "Nickname:"+data.nickname;
 
-  const lifes = document.createElement("h4");
-  lifes.textContent = "lifes:"+data.starship.life;
+  //const divData = document.createElement("div");
+  
+  const nickname = document.createElement("p");
+  nickname.textContent = data.nickname;
+
+
+
+  const lifes = document.createElement("p");
+  lifes.textContent = data.starship.life;
   lifes.id = data.id;
 
-  const points = document.createElement("h4");
-  points.textContent = "points:"+data.starship.points;
+
+
+  const points = document.createElement("p");
+  points.textContent = data.starship.points;
   points.id = data.id+"points";
 
-
-  divData.appendChild(nickname);
-  divData.appendChild(lifes);
-  divData.appendChild(points);
   divUser.appendChild(img);
-  divUser.appendChild(divData);
+  divUser.appendChild(nickname);
+  divUser.appendChild(lifes);
+  divUser.appendChild(points);
   klingon.appendChild(divUser);
 
 }
@@ -345,7 +349,7 @@ function paintOtherShip(player){
 
 function modifyLifes(player,me=false){
   
-  document.getElementById(player.id).innerHTML = "Lifes:" + player.starship.life;
+  document.getElementById(player.id).innerHTML = player.starship.life;
 
   if(player.starship.life===0){
 
@@ -379,7 +383,7 @@ function gameEnded(dataIn){
 }
 
 function modifyPoints(player){
-  document.getElementById(player.id+"points").innerHTML = "Points:" + player.starship.points;
+  document.getElementById(player.id+"points").innerHTML = player.starship.points;
 }
 
 
@@ -479,8 +483,8 @@ function moveLaser(id, laser, angle, width, height) {
 }
 
 function randomXPosition(){
-  return Math.floor(Math.random() * GALAXY_WIDTH);
+  return Math.floor(Math.random() * GALAXY_WIDTH) - 50;
 }
 function randomYPosition(){
-  return Math.floor(Math.random() * GALAXY_HEIGHT);
+  return Math.floor(Math.random() * GALAXY_HEIGHT) - 50;
 }
