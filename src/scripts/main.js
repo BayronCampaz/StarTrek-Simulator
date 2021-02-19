@@ -56,7 +56,6 @@ function erasePlayer(idPlayer){
   otherShips[idPlayer.string].starship.el.remove()
 
   delete otherShips[idPlayer.string]
-  console.log(otherShips)
 }
 
 async function connect(options,create=false) {
@@ -69,6 +68,7 @@ async function connect(options,create=false) {
     client.subscribe("raichu/"+room.id+"/positions").on(changePosition);
     client.subscribe("raichu/"+room.id+"/bullets").on(getOtherBullets);
     client.subscribe("raichu/"+room.id+"/playerDiconnected").on(erasePlayer);
+    client.subscribe("raichu/"+room.id+"/lose").on(gameEnded);
 
     client.publish("raichu/"+room.id+"/informNewPosition", transformObject(myPlayer));
   
@@ -352,6 +352,7 @@ function modifyLifes(player,me=false){
   document.getElementById(player.id).innerHTML = player.starship.life;
 
   if(player.starship.life===0){
+
     player.starship.el.remove()
     const userDiv = document.getElementById('user'+player.id)
     userDiv.style.border = "3px solid red"
@@ -359,10 +360,26 @@ function modifyLifes(player,me=false){
     player.alive=false
 
     if(detectLosers(player.team)){
-      const showMessage = document.getElementById("message")
-      showMessage.style.display = "block"
+      client.publish("raichu/"+room.id+"/lose", player.team )
     }    
   }
+}
+
+function gameEnded(dataIn){
+  let loseTeam = dataIn.string;
+  let modal = document.getElementById("modal");
+  modal.style.display = "block";
+
+  if(myPlayer.team != loseTeam){
+    document.getElementById("title-modal").innerHTML = "YOU WIN"
+    document.getElementById("title-modal").classList.add('win-title');
+  }else{
+    document.getElementById("title-modal").innerHTML = "YOU LOSE"
+    document.getElementById("title-modal").classList.add('lose-title');
+  }
+
+  document.getElementById("score-modal").innerHTML = "Score: " + myPlayer.starship.points;
+
 }
 
 function modifyPoints(player){
