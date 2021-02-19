@@ -483,8 +483,8 @@ function moveLaser(id, laser, angle, width, height) {
 }
 
 function randomXPosition(){
-  return Math.floor(Math.random() * GALAXY_WIDTH);
+  return Math.floor(Math.random() * GALAXY_WIDTH) - 50;
 }
 function randomYPosition(){
-  return Math.floor(Math.random() * GALAXY_HEIGHT);
+  return Math.floor(Math.random() * GALAXY_HEIGHT) - 50;
 }
