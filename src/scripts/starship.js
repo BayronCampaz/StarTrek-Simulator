@@ -42,7 +42,7 @@ class Starship {
   }
 
   setPosition(x, y) {
-    
+
     if(!this.detectLimit(x,y,50)) {
       this.x = x;
       this.y = y;
