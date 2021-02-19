@@ -22,6 +22,7 @@
   <script src="./scripts/room.js"></script>
   <script src="./scripts/starship.js"></script>
   <script src="./scripts/main.js"></script>
+
 </head>
 
 <body>
@@ -204,6 +205,24 @@
 
   </div>
   <!-- End Game -->
+
+<!-- The Modal -->
+<div id="modal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div class="modal-centered">
+      <h1 id="title-modal">You win</h1>
+      <p id="score-modal">Score: 2000</p>
+      <button onClick="window.location.reload();">TRY AGAIN</button>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="./scripts/modal.js"></script>
 </body>
 
 </html>
